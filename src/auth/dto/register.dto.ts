@@ -17,8 +17,4 @@ export class RegisterDto {
     @IsEnum(['ADMIN', 'PETUGAS', 'MEMBER'])
     role?: 'ADMIN' | 'PETUGAS' | 'MEMBER';
 
-    @ApiPropertyOptional({ example: 12345 })
-    @IsOptional()
-    @IsNumber()
-    studentId?: number;
 }
