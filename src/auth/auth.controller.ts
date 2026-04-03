@@ -2,7 +2,10 @@ import { Controller, Post, Body, UseGuards, Req } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
@@ -10,11 +13,9 @@ export class AuthController {
 
   @Post('register')
   @ApiOperation({ summary: 'Mendaftarkan user baru' })
-  register(@Body() dto: any, @Req() req: any) { 
+  register(@Body() dto: RegisterDto, @Req() req: any) {
     
-    const roleYgLogin = req.user.role; 
-
-
+    const roleYgLogin = req.user?.role || 'USER'; 
     return this.authService.register(dto, roleYgLogin);
   }
 

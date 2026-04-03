@@ -42,7 +42,7 @@ export class AuthService {
       password: string;
       role?: 'ADMIN' | 'PETUGAS' | 'MEMBER';
       studentId?: number;
-    },
+    }, 
     currentUserRole?: string,
   ) {
     const role = data.role ?? 'MEMBER';
