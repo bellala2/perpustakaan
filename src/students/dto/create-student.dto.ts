@@ -2,17 +2,17 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateStudentDto {
   @ApiProperty({ example: '12345', description: 'Nomor Induk Siswa' })
-  nis?: string;
+  nis: string;
 
   @ApiProperty({ example: 'Bella', description: 'Nama Lengkap Siswa' })
-  name?: string;
+  name: string;
 
   @ApiProperty({ example: 'bella@mail.com', description: 'Email Aktif' })
-  email?: string;
+  email: string;
 
   @ApiProperty({ example: 'XII-RPL', description: 'Kelas Siswa' })
-  kelas?: string;
+  kelas: string;
 
   @ApiProperty({ example: 'Rekayasa Perangkat Lunak', description: 'Jurusan Siswa' })
-  jurusan?: string;
+  jurusan: string;
 }
