@@ -16,7 +16,7 @@ export class JwtStrategy extends
       userId: payload.sub,
       username: payload.username,
       role: payload.role,
-      studentId: payload.memberId, 
+      studentId: payload.studentId, 
     };
     
     }
