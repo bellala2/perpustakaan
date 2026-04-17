@@ -12,6 +12,7 @@ export class JwtStrategy extends
         });
     }
     validate(payload: any) {
-  return payload; 
+  console.log('JWT MASUK:', payload);
+  return payload;
 }
 } 
