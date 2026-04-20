@@ -1,6 +1,9 @@
+import { IsInt } from 'class-validator';
+
 export class CreatePeminjamanDto {
-  studentId: number;       
-  bookId: number;          
-  tanggalPinjam?: Date;    
-  status?: 'DIPINJAM' | 'DIKEMBALIKAN'; 
+  @IsInt()
+  studentId!: number;
+
+  @IsInt()
+  bookId!: number;
 }

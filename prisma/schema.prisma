@@ -7,6 +7,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model student {
+  id         Int          @id @default(autoincrement())
+  nis        String       @unique(map: "Student_nis_key")
+  name       String
+  email      String?      @unique(map: "Student_email_key")
+  kelas      String
+  jurusan    String
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  peminjaman peminjaman[]
+  user       user?
+}
+
+model walas {
+  id_walas   Int    @id @default(autoincrement())
+  nama_walas String
+  no_tlp     String
+  alamat     String
+}
+
 model book {
   id         Int          @id @default(autoincrement())
   title      String
@@ -42,19 +62,6 @@ model pengembalian {
   @@index([peminjamanId], map: "Pengembalian_peminjamanId_idx")
 }
 
-model student {
-  id         Int          @id @default(autoincrement())
-  nis        String       @unique(map: "Student_nis_key")
-  name       String
-  email      String?      @unique(map: "Student_email_key")
-  kelas      String
-  jurusan    String
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  peminjaman peminjaman[]
-  user       user?
-}
-
 model user {
   id        Int       @id @default(autoincrement())
   username  String    @unique(map: "User_username_key")
@@ -65,12 +72,6 @@ model user {
   student   student?  @relation(fields: [studentId], references: [id], map: "User_studentId_fkey")
 }
 
-model walas {
-  id_walas   Int    @id @default(autoincrement())
-  nama_walas String
-  no_tlp     String
-  alamat     String
-}
 
 enum user_role {
   ADMIN

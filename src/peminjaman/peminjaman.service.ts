@@ -1,74 +1,64 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreatePeminjamanDto } from './dto/create-peminjaman.dto';
 import { UpdatePeminjamanDto } from './dto/update-peminjaman.dto';
 
 @Injectable()
 export class PeminjamanService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
-  create(dto: CreatePeminjamanDto) {
-    return this.prisma.peminjaman.create({
-      data: {
-        studentId: dto.studentId,
-        bookId: dto.bookId,
-        status: dto.status ?? 'DIPINJAM',
-        tanggalPinjam: dto.tanggalPinjam ?? new Date(),
-      },
+  async create(dto: CreatePeminjamanDto) {
+    const student = await this.prisma.student.findUnique({ where: { id: dto.studentId } });
+    if (!student) throw new NotFoundException('Student tidak ditemukan');
+
+    const book = await this.prisma.book.findUnique({ where: { id: dto.bookId } });
+    if (!book) throw new NotFoundException('Book tidak ditemukan');
+
+    const masihDipinjam = await this.prisma.peminjaman.findFirst({
+      where: { bookId: dto.bookId, status: 'DIPINJAM' },
     });
+    if (masihDipinjam) throw new BadRequestException('Buku ini sedang dalam status DIPINJAM');
+
+    return this.prisma.peminjaman.create({ data: dto });
   }
 
-   async findAll() {
-  return this.prisma.peminjaman.findMany(); 
-}
-  async findByStudent(userId: number) {
+  async findAll(tanggal?: string) {
+    const where: any = {};
+
+    // PERBAIKAN: Cek apakah tanggal ada dan tidak kosong
+    if (tanggal && tanggal.trim() !== '') {
+      const startDate = new Date(tanggal);
+      const endDate = new Date(tanggal);
+      endDate.setDate(endDate.getDate() + 1);
+
+      where.tanggalPinjam = {
+        gte: startDate,
+        lt: endDate,
+      };
+    }
+
     return this.prisma.peminjaman.findMany({
-      where: {
-        student: {
-          user: {
-            id: userId,
-          },
-        },
-      },
+      where,
       include: {
         student: true,
         book: true,
+        pengembalian: true,
       },
-      orderBy: {
-        tanggalPinjam: 'desc',
-      },
+      orderBy: { id: 'asc' },
     });
   }
 
   async findOne(id: number) {
-    const peminjaman = await this.prisma.peminjaman.findUnique({
+    const data = await this.prisma.peminjaman.findUnique({
       where: { id },
-      include: {
-        student: true,
-        book: true,
-      },
+      include: { student: true, book: true, pengembalian: true },
     });
-
-    if (!peminjaman) throw new NotFoundException('Peminjaman tidak ditemukan');
-
-    return peminjaman;
+    if (!data) throw new NotFoundException('Data peminjaman tidak ditemukan');
+    return data;
   }
 
-  async returnBook(id: number) {
-    const peminjaman = await this.prisma.peminjaman.update({
-      where: { id },
-      data: {
-        status: 'DIKEMBALIKAN',
-        tanggalKembali: new Date(),
-      },
-    });
-
-    return peminjaman;
-  }
-
-  delete(id: number) {
-    return this.prisma.peminjaman.delete({
-      where: { id },
-    });
+  async update(id: number, dto: UpdatePeminjamanDto) {
+    await this.findOne(id);
+    return this.prisma.peminjaman.update({ where: { id }, data: dto });
   }
 }

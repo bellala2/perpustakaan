@@ -1,7 +1,7 @@
+import { IsEnum } from 'class-validator';
+import { peminjaman_status } from '@prisma/client';
+
 export class UpdatePeminjamanDto {
-  studentId?: number;        
-  bookId?: number;          
-  status?: 'DIPINJAM' | 'DIKEMBALIKAN'; 
-  tanggalPinjam?: Date;      
-  tanggalKembali?: Date;    
+  @IsEnum(peminjaman_status)
+  status!: peminjaman_status;
 }

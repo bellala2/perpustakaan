@@ -10,3 +10,4 @@ import { PrismaModule } from '../../prisma/prisma.module';
   controllers: [PeminjamanController],
 })
 export class PeminjamanModule {}
+
