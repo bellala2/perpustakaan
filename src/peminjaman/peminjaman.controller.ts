@@ -33,8 +33,6 @@ export class PeminjamanController {
     return this.peminjamanService.findOne(+id);
   }
 
-  @UseGuards(RolesGuard)
-  @Roles(user_role.ADMIN, user_role.PETUGAS)
   @Post()
   create(@Body() dto: CreatePeminjamanDto, @Req() req) {
     console.log('USER:', req.user);
