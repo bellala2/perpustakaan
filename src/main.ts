@@ -7,6 +7,11 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule); 
   console.log("SERVER NYALA, JWT_SECRET ADALAH:", process.env.JWT_SECRET);
 
+  app.use((req, res, next) => {
+    console.log('AUTH HEADER:', req.headers.authorization);
+    next();
+  });
+
   app.enableCors();
   //app.useGlobalPipes(new ValidationPipe()); 
  
