@@ -20,6 +20,10 @@ export class PeminjamanController {
   findAll() {
     return this.peminjamanService.findAll();
   }
+ @Get('my/history')
+  getMyHistory(@Req() req) {
+    return this.peminjamanService.findByStudent(req.user.sub);
+  }
 
   @UseGuards(RolesGuard)
   @Roles(user_role.ADMIN, user_role.PETUGAS)
@@ -34,10 +38,5 @@ export class PeminjamanController {
   create(@Body() dto: CreatePeminjamanDto, @Req() req) {
     console.log('USER:', req.user);
     return this.peminjamanService.create(dto);
-  }
-
-  @Get('my/history')
-  getMyHistory(@Req() req) {
-    return this.peminjamanService.findByStudent(req.user.sub);
   }
 }
