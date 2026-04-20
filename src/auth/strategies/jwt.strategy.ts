@@ -8,7 +8,7 @@ export class JwtStrategy extends
     super({
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
         ignoreExpiration: false,
-        secretOrKey: `secretOrKey` ,
+        secretOrKey: process.env.JWT_SECRET || 'NEST_PRISMA', 
     });
 }
     validate(payload: any) {
