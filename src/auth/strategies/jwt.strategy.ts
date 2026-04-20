@@ -7,6 +7,7 @@ export class JwtStrategy extends
     constructor() {
     super({
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+        ignoreExpiration: false,
         secretOrKey: process.env.JWT_SECRET || 'NEST_PRISMA', 
     });
 }
