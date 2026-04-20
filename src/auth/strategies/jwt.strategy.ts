@@ -5,12 +5,11 @@ import { Injectable } from '@nestjs/common';
 export class JwtStrategy extends
     PassportStrategy(Strategy) {
     constructor() {
-        super({
-            jwtFromRequest:
-                ExtractJwt.fromAuthHeaderAsBearerToken(),
-            secretOrKey: 'NEST_PRISMA',
-        });
-    }
+    super({
+        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+        secretOrKey: process.env.JWT_SECRET || 'NEST_PRISMA', 
+    });
+}
     validate(payload: any) {
   console.log('JWT MASUK:', payload);
   return payload;
