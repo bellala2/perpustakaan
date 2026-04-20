@@ -13,14 +13,22 @@ async function bootstrap() {
     .setTitle('Library API') 
     .setDescription('Backend API Sistem Perpustakaan') 
     .setVersion('1.0') 
-    .addBearerAuth() 
-    .build(); 
- 
-  const document = SwaggerModule.createDocument(app, config); 
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Masukkan Token JWT',
+        in: 'header',
+      },
+      'bearer', 
+    ) 
+    .build();
+    const document = SwaggerModule.createDocument(app, config); 
   SwaggerModule.setup('api', app, document); 
 
   const port = process.env.PORT || 3000;
   await app.listen(port, '0.0.0.0');
-  console.log(`Application is running on port: ${port}`);
-}
-bootstrap(); 
+console.log(`Application is running on port: ${port}`);}
+bootstrap();
