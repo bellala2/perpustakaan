@@ -8,8 +8,9 @@ import { user_role } from '@prisma/client';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiBearerAuth('bearer')
+@UseGuards(JwtAuthGuard)
 @Controller('peminjaman')
-@UseGuards(JwtAuthGuard) 
+
 export class PeminjamanController {
   constructor(private readonly peminjamanService: PeminjamanService) {}
 
