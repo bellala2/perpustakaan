@@ -29,6 +29,8 @@ export class PeminjamanController {
   }
 
   @Post()
+  @UseGuards(RolesGuard)
+  @Roles(user_role.ADMIN, user_role.PETUGAS)
   create(@Body() dto: CreatePeminjamanDto, @Req() req) {
     console.log('USER:', req.user);
     return this.peminjamanService.create(dto);
