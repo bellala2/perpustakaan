@@ -58,7 +58,6 @@ model pengembalian {
   tanggalKembali DateTime   @default(now())
   createdAt      DateTime   @default(now())
   peminjaman     peminjaman @relation(fields: [peminjamanId], references: [id], onDelete: Cascade, map: "Pengembalian_peminjamanId_fkey")
-
   @@index([peminjamanId], map: "Pengembalian_peminjamanId_idx")
 }
 
@@ -69,7 +68,7 @@ model user {
   role      user_role
   studentId Int?      @unique(map: "User_studentId_key")
   createdAt DateTime  @default(now())
-  student   student?  @relation(fields: [studentId], references: [id], map: "User_studentId_fkey")
+  student   stu  dent?  @relation(fields: [studentId], references: [id], map: "User_studentId_fkey")
 }
 
 
